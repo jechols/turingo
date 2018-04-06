@@ -47,11 +47,13 @@ type operation struct {
 
 // dirmap defines what the direction runes actually mean.  It would be simpler
 // to make conditions just store a raw int, but runes help visualize the
-// machine's instructions.
-var dirmap = map[rune]int{'L': -1, 'R': 1}
+// machine's instructions.  Note that the head moves the opposite of the
+// instructions because we're simulating a tape being moved in the desired
+// direction while the head stays stationary.
+var dirmap = map[rune]int{'L': 1, 'R': -1}
 
-func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, headDirection rune, newState string) error {
-	if headDirection != 'R' && headDirection != 'L' {
+func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, tapeDir rune, newState string) error {
+	if _, ok := dirmap[tapeDir]; !ok {
 		return errors.New("invalid direction")
 	}
 	var c = condition{state, seeVal}
@@ -59,7 +61,7 @@ func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, headD
 		return errors.New("repeating condition: " + state + "/" + string(seeVal))
 	}
 
-	m.instructions[c] = operation{newValue, headDirection, newState}
+	m.instructions[c] = operation{newValue, tapeDir, newState}
 	return nil
 }
 
