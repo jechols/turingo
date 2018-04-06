@@ -57,13 +57,19 @@ func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, headD
 
 func (m *Machine) Run(state string, n int, itercb func()) error {
 	m.state = state
-	for n > 0 {
+	for n == -1 || n > 0 {
 		itercb()
 		m.growTape()
-		n--
+
+		if n > 0 {
+			n--
+		}
 		var c = condition{m.state, m.tape[m.head]}
 		var op, ok = m.instructions[c]
 		if !ok {
+			if n == -1 {
+				return nil
+			}
 			return errors.New("machine state has no valid instructions for continuing")
 		}
 
