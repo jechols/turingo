@@ -67,7 +67,6 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 	m.state = state
 	for n == -1 || n > 0 {
 		itercb()
-		m.growTape()
 
 		if n > 0 {
 			n--
@@ -90,6 +89,7 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 		if m.head > m.maxHead {
 			m.maxHead = m.head
 		}
+		m.growTape()
 	}
 
 	// We call the iterator one extra time to get the final state
