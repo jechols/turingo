@@ -127,21 +127,17 @@ func (m *Machine) fillTape() {
 func (m *Machine) String() string {
 	// We print out only the nearest bytes, but in a way that attempts to show
 	// useful context as the head pointer moves
-	var prefix = "..."
 	var tapeStart = m.minHead - 2
 	if tapeStart <= 0 {
 		tapeStart = 0
-		prefix = ""
 	}
 
-	var suffix = "..."
 	var tapeEnd = m.maxHead + 2
 	if tapeEnd >= len(m.tape) {
 		tapeEnd = len(m.tape) - 1
-		suffix = ""
 	}
 
-	var out = fmt.Sprintf("%6s: ", m.state) + prefix
+	var out = fmt.Sprintf("%6s: ...", m.state)
 
 	var tapeSlice = m.tape[tapeStart:tapeEnd]
 	for i, r := range tapeSlice {
@@ -152,6 +148,6 @@ func (m *Machine) String() string {
 		}
 	}
 
-	out += suffix
+	out += "..."
 	return out
 }
