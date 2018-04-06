@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// Number of bytes to grow the tape each time it needs to increase
+const tapeGrow = 256
+
 // Machine is our turing machine
 type Machine struct {
 	// Machine implementation
@@ -97,16 +100,16 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 
 // growTape checks to see if head is too far left or right, and adds data to
 // the tape (adjusting head if necessary).  To avoid recreating tape data too
-// often, we provision 256 bytes at a time.
+// often, we provision tapeGrow bytes at a time.
 func (m *Machine) growTape() {
 	if m.head < 0 {
-		var newTape = make([]rune, 256)
+		var newTape = make([]rune, tapeGrow)
 		m.tape = append(newTape, m.tape...)
-		m.head += 256
+		m.head += tapeGrow
 		m.fillTape()
 	}
 	if m.head >= len(m.tape) {
-		var newTape = make([]rune, 256)
+		var newTape = make([]rune, tapeGrow)
 		m.tape = append(m.tape, newTape...)
 		m.fillTape()
 	}
