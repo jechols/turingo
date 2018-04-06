@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// NoOp can be used for printing or tape movement to say "this doesn't do anything"
+const NoOp = 0
+
 // Empty is the value of uninitialized tape
 const Empty = '0'
 
@@ -53,7 +56,7 @@ type operation struct {
 // machine's instructions.  Note that the head moves the opposite of the
 // instructions because we're simulating a tape being moved in the desired
 // direction while the head stays stationary.
-var dirmap = map[rune]int{'L': 1, 'R': -1}
+var dirmap = map[rune]int{'L': 1, 'R': -1, NoOp: 0}
 
 func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, tapeDir rune, newState string) error {
 	if _, ok := dirmap[tapeDir]; !ok {
@@ -85,7 +88,10 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 			return errors.New("machine state has no valid instructions for continuing")
 		}
 
-		m.tape[m.head] = op.val
+		// Allow for a print operation of "do nothing"
+		if op.val != NoOp {
+			m.tape[m.head] = op.val
+		}
 		m.head += dirmap[op.dir]
 		m.state = op.state
 		if m.head < m.minHead {
