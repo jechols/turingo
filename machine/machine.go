@@ -106,6 +106,8 @@ func (m *Machine) growTape() {
 		var newTape = make([]rune, tapeGrow)
 		m.tape = append(newTape, m.tape...)
 		m.head += tapeGrow
+		m.minHead += tapeGrow
+		m.maxHead += tapeGrow
 		m.fillTape()
 	}
 	if m.head >= len(m.tape) {
