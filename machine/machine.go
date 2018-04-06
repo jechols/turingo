@@ -11,6 +11,7 @@ const NoOp = 0
 // Empty is the value of uninitialized tape
 const Empty = '0'
 
+// StateComplete should be used to say a program will not continue after the given instruction
 const StateComplete = "HALT"
 
 // Number of bytes to grow the tape each time it needs to increase
@@ -60,6 +61,13 @@ type operation struct {
 // direction while the head stays stationary.
 var dirmap = map[rune]int{'L': 1, 'R': -1, NoOp: 0}
 
+// AddInstruction puts a new instruction into the list based on the state and
+// "seeVal".  When the state is the same as the given state and the tape value
+// is equal to seeVal, the machine will do the following:
+//
+//   - Write newValue to the tape
+//   - Move the tape in direction indicated by tapeDir (left: 'L', right: 'R', or no movement: machine.NoOp)
+//   - Change the machine's state to newState
 func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, tapeDir rune, newState string) error {
 	if _, ok := dirmap[tapeDir]; !ok {
 		return errors.New("invalid direction")
@@ -73,6 +81,11 @@ func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, tapeD
 	return nil
 }
 
+// Run begins the machine's run, iterating n times or until a StateComplete
+// state is reached.  An iteration callback will be run prior to each iteration
+// and again when the machine is done.  An error will be returned if the
+// machine reaches a point where no instructions are found for the current
+// state and tape cell data.
 func (m *Machine) Run(state string, n int, itercb func()) error {
 	m.state = state
 	for n != 0 && m.state != StateComplete {
