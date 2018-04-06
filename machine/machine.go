@@ -115,11 +115,11 @@ func (m *Machine) growTape() {
 	}
 }
 
-// fillTape just turns empty tape cells into the letter 'B' to represent the blank state
+// fillTape just turns empty tape cells into the value '0' to represent the blank state
 func (m *Machine) fillTape() {
 	for i, val := range m.tape {
 		if val == 0 {
-			m.tape[i] = 'B'
+			m.tape[i] = '0'
 		}
 	}
 }
