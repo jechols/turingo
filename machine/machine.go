@@ -142,7 +142,7 @@ func (m *Machine) String() string {
 		tapeStart = 0
 	}
 
-	var tapeEnd = m.maxHead + 2
+	var tapeEnd = m.maxHead + 3
 	if tapeEnd >= len(m.tape) {
 		tapeEnd = len(m.tape) - 1
 	}
