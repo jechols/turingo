@@ -48,6 +48,16 @@ func main() {
 	m.AddInstruction("s11", '1', ')', 'R', machine.StateComplete)
 
 	printMachine(m, "DAS: Add 2+3", "s1", -1)
+
+	// Three-state busy beaver
+	m = machine.New()
+	m.AddInstruction("A", '0', '1', 'R', "B")
+	m.AddInstruction("A", '1', '1', 'L', "C")
+	m.AddInstruction("B", '0', '1', 'L', "A")
+	m.AddInstruction("B", '1', '1', 'R', "B")
+	m.AddInstruction("C", '0', '1', 'L', "B")
+	m.AddInstruction("C", '1', '1', machine.NoOp, machine.StateComplete)
+	printMachine(m, "Wikipedia: Three-state busy beaver", "A", -1)
 }
 
 func printMachine(m *machine.Machine, title string, startingState string, iterations int) {
