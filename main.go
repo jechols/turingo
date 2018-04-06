@@ -49,8 +49,11 @@ func printMachine(m *machine.Machine, title string, startingState string, iterat
 	fmt.Println()
 	fmt.Println(title)
 	fmt.Println(strings.Repeat("-", len(title)))
-	m.Run(startingState, iterations, func() {
+	var err = m.Run(startingState, iterations, func() {
 		fmt.Println(m.String())
 	})
 	fmt.Println()
+	if err != nil {
+		fmt.Println("Error running machine:", err)
+	}
 }
