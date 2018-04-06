@@ -11,10 +11,10 @@ func TestGrowTape(t *testing.T) {
 	if m.head != tapeGrow {
 		t.Errorf("Expected an initialized machine to have a head at %d, but it was %d", tapeGrow, m.head)
 	}
-	if len(m.tape) != tapeGrow * 2 {
+	if len(m.tape) != tapeGrow*2 {
 		t.Errorf("Expected an initialized machine's tape to be %d bytes, but it was %d", tapeGrow*2, len(m.tape))
 	}
-	if string(m.tape) != strings.Repeat(string(Empty), tapeGrow * 2) {
+	if string(m.tape) != strings.Repeat(string(Empty), tapeGrow*2) {
 		t.Errorf("Expected an initialized machine to be filled with zeroes")
 	}
 

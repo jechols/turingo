@@ -123,7 +123,7 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 // the tape (adjusting head if necessary).  To avoid recreating tape data too
 // often, we provision tapeGrow bytes at a time.
 func (m *Machine) growTape() {
-	if m.head <= tapeGrow / 3 {
+	if m.head <= tapeGrow/3 {
 		var newTape = make([]rune, tapeGrow)
 		m.tape = append(newTape, m.tape...)
 		m.head += tapeGrow
@@ -131,7 +131,7 @@ func (m *Machine) growTape() {
 		m.maxHead += tapeGrow
 		m.fillTape()
 	}
-	if m.head >= len(m.tape) - tapeGrow / 3 {
+	if m.head >= len(m.tape)-tapeGrow/3 {
 		var newTape = make([]rune, tapeGrow)
 		m.tape = append(m.tape, newTape...)
 		m.fillTape()
