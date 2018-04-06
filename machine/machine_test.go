@@ -8,7 +8,7 @@ import (
 func TestGrowTape(t *testing.T) {
 	// Creating a new machine should start us in the middle of a tape
 	var m = New()
-	if string(m.tape) != strings.Repeat("B", 256) || m.head != 127 {
+	if string(m.tape) != strings.Repeat("B", 256) || m.head != 0 {
 		t.Errorf("Expected an initialized machine, got a tape of %q and head of %d", m.tape, m.head)
 	}
 

@@ -7,10 +7,16 @@ import (
 
 // Machine is our turing machine
 type Machine struct {
+	// Machine implementation
 	state string
 	tape  []rune
 	head  int
 
+	// Storing old state just to help us print out what's happening with better context
+	minHead int
+	maxHead int
+
+	// The "code" we're running
 	instructions map[condition]operation
 }
 
@@ -18,7 +24,6 @@ type Machine struct {
 func New() *Machine {
 	var m = &Machine{instructions: make(map[condition]operation)}
 	m.growTape()
-	m.head = 127
 	return m
 }
 
@@ -76,6 +81,12 @@ func (m *Machine) Run(state string, n int, itercb func()) error {
 		m.tape[m.head] = op.val
 		m.head += dirmap[op.dir]
 		m.state = op.state
+		if m.head < m.minHead {
+			m.minHead = m.head
+		}
+		if m.head > m.maxHead {
+			m.maxHead = m.head
+		}
 	}
 
 	// We call the iterator one extra time to get the final state
@@ -114,13 +125,14 @@ func (m *Machine) String() string {
 	// We print out only the nearest bytes, but in a way that attempts to show
 	// useful context as the head pointer moves
 	var prefix = "..."
-	var tapeStart = (m.head / 10) * 10
-	if tapeStart == m.head {
+	var tapeStart = m.minHead - 2
+	if tapeStart <= 0 {
+		tapeStart = 0
 		prefix = ""
 	}
 
 	var suffix = "..."
-	var tapeEnd = tapeStart + 15
+	var tapeEnd = m.maxHead + 2
 	if tapeEnd >= len(m.tape) {
 		tapeEnd = len(m.tape) - 1
 		suffix = ""
