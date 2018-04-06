@@ -17,6 +17,11 @@ func main() {
 	m.AddInstruction("s4", machine.Empty, machine.Empty, 'L', "s1")
 	printMachine(m, "DAS: Toggle 0->1", "s1", 8)
 
+	// Flip symbols with noops
+	m = machine.New()
+	m.AddInstruction("s1", machine.Empty, '1', machine.NoOp, "s2")
+	m.AddInstruction("s2", '1', machine.Empty, machine.NoOp, "s1")
+	printMachine(m, "DAS: Toggle 0->1 with noops", "s1", 8)
 
 	// DAS adding machine
 	m = machine.New()
