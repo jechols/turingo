@@ -2,6 +2,7 @@ package main // import "github.com/jechols/turingo"
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jechols/turingo/machine"
 )
@@ -14,13 +15,8 @@ func main() {
 	m.AddInstruction("s2", machine.Empty, machine.Empty, 'L', "s3")
 	m.AddInstruction("s3", '1', machine.Empty, 'R', "s4")
 	m.AddInstruction("s4", machine.Empty, machine.Empty, 'L', "s1")
+	printMachine(m, "DAS: Toggle 0->1", "s1", 8)
 
-	fmt.Println("DAS: Toggle 0->1")
-	fmt.Println("----------------")
-	m.Run("s1", 8, func() {
-		fmt.Println(m.String())
-	})
-	fmt.Println()
 
 	// DAS adding machine
 	m = machine.New()
@@ -46,9 +42,15 @@ func main() {
 	m.AddInstruction("s10", ')', machine.Empty, 'R', "s11")
 	m.AddInstruction("s11", '1', ')', 'R', "done")
 
-	fmt.Println("DAS: Add 2+3")
-	fmt.Println("------------")
-	m.Run("s1", -1, func() {
+	printMachine(m, "DAS: Add 2+3", "s1", -1)
+}
+
+func printMachine(m *machine.Machine, title string, startingState string, iterations int) {
+	fmt.Println()
+	fmt.Println(title)
+	fmt.Println(strings.Repeat("-", len(title)))
+	m.Run(startingState, iterations, func() {
 		fmt.Println(m.String())
 	})
+	fmt.Println()
 }
