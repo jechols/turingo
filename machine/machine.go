@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// Empty is the value of uninitialized tape
+const Empty = '0'
+
 // Number of bytes to grow the tape each time it needs to increase
 const tapeGrow = 256
 
@@ -123,7 +126,7 @@ func (m *Machine) growTape() {
 func (m *Machine) fillTape() {
 	for i, val := range m.tape {
 		if val == 0 {
-			m.tape[i] = '0'
+			m.tape[i] = Empty
 		}
 	}
 }
