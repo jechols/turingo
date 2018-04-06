@@ -40,7 +40,7 @@ func main() {
 	m.AddInstruction("s9", '+', '1', 'L', "s10")
 	m.AddInstruction("s10", '1', '1', 'L', "s10")
 	m.AddInstruction("s10", ')', machine.Empty, 'R', "s11")
-	m.AddInstruction("s11", '1', ')', 'R', "done")
+	m.AddInstruction("s11", '1', ')', 'R', machine.StateComplete)
 
 	printMachine(m, "DAS: Add 2+3", "s1", -1)
 }

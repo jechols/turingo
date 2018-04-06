@@ -11,6 +11,8 @@ const NoOp = 0
 // Empty is the value of uninitialized tape
 const Empty = '0'
 
+const StateComplete = "HALT"
+
 // Number of bytes to grow the tape each time it needs to increase
 const tapeGrow = 256
 
@@ -73,18 +75,13 @@ func (m *Machine) AddInstruction(state string, seeVal rune, newValue rune, tapeD
 
 func (m *Machine) Run(state string, n int, itercb func()) error {
 	m.state = state
-	for n == -1 || n > 0 {
+	for n != 0 && m.state != StateComplete {
 		itercb()
 
-		if n > 0 {
-			n--
-		}
+		n--
 		var c = condition{m.state, m.tape[m.head]}
 		var op, ok = m.instructions[c]
 		if !ok {
-			if n == -1 {
-				return nil
-			}
 			return errors.New("machine state has no valid instructions for continuing")
 		}
 
